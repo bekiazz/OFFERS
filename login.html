@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Elsewedy Electric</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-logo">
+      <div class="company-name">ELSEWEDY</div>
+      <div class="line"></div>
+      <div class="slogan">ELECTRIC</div>
+      <div class="accent-curve"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container auth-form">
+      <h2>Admin Login</h2>
+      <input id="email" type="email" placeholder="Email" required />
+      <input id="password" type="password" placeholder="Password" required />
+      <button id="loginBtn">Login</button>
+      <p id="error" class="message message-error"></p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const loginBtn = document.getElementById("loginBtn");
+    const errorMsg = document.getElementById("error");
+
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !password) {
+        errorMsg.textContent = "Please enter both email and password.";
+        return;
+      }
+
+      errorMsg.textContent = "";
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          errorMsg.textContent = error.message;
+        });
+    });
+
+    document.getElementById("password").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") loginBtn.click();
+    });
+  </script>
+</body>
+</html>
